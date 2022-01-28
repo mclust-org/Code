@@ -407,13 +407,13 @@ legend("topright", title = "Diagnosis:", legend = names(prop),
 ## ----echo=-1--------------------------------------------------------------------
 set.seed(20190520)
 cv <- cvMclustDA(mod)  # by default: prop = mod$prop
-unlist(cv[c("error", "se.error")])
+unlist(cv[c("ce", "se.ce")])
 
 
 ## ----echo=-1--------------------------------------------------------------------
 set.seed(20190520)
 cv <- cvMclustDA(mod, prop = c(0.5, 0.5))
-unlist(cv[c("error", "se.error")])
+unlist(cv[c("ce", "se.ce")])
 
 
 ## -------------------------------------------------------------------------------

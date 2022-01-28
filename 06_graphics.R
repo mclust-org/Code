@@ -377,7 +377,7 @@ ggplot(faithful, aes(waiting)) +
 ## 
 
 ## ----ggplot_hemophilia_boot1, echo=-1, fig.cap="Bootstrap distribution for the mixture proportions of (\\code{VVV},2) model fitted to the \\code{hemophilia}\\ data.", fig.width=9, fig.height=5, out.width="0.9\\textwidth"----
-load_cache("mclust_hemophilia_boot", path = "./Cache/")
+# load_cache("mclust_hemophilia_boot", path = "./Cache/")
 DF <- data.frame(mixcomp = rep(1:boot$G, each = boot$nboot), 
                  pro = as.vector(boot$pro))
 ggplot(DF, aes(x = pro)) + 
