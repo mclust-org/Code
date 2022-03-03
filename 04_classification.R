@@ -1,17 +1,17 @@
-## -------------------------------------------------------------------------------
-data(wdbc, package = "mclust")
-X <- wdbc[,c("Texture_mean", "Area_extreme", "Smoothness_extreme")]
-Class <- wdbc[,"Diagnosis"]
+## ---------------------------------------------------------------------------
+data("wdbc", package = "mclust")
+X <- wdbc[, c("Texture_mean", "Area_extreme", "Smoothness_extreme")]
+Class <- wdbc[, "Diagnosis"]
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 set.seed(123)
 train <- sample(1:nrow(X), size = round(nrow(X)*2/3), replace = FALSE)
-X_train <- X[train,]
+X_train <- X[train, ]
 Class_train <- Class[train]
 tab <- table(Class_train)
 cbind(Counts = tab, "%" = prop.table(tab)*100)
-X_test <- X[-train,]
+X_test <- X[-train, ]
 Class_test <- Class[-train]
 tab <- table(Class_test)
 cbind(Counts = tab, "%" = prop.table(tab)*100)
@@ -24,16 +24,16 @@ clPairsLegend(0.1, 0.3, col = clp$col, pch = clp$pch,
               title = "Breast cancer diagnosis:")
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mod1 <- MclustDA(X_train, Class_train, modelType = "EDDA")
 summary(mod1)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 summary(mod1, parameters = TRUE)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 summary(mod1, newdata = X_test, newclass = Class_test)
 
 
@@ -45,7 +45,7 @@ plot(mod1, what = "scatterplot")
 plot(mod1, what = "error")
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mod2 <- MclustDA(X_train, Class_train)
 summary(mod2, newdata = X_test, newclass = Class_test)
 
@@ -54,16 +54,16 @@ summary(mod2, newdata = X_test, newclass = Class_test)
 plot(mod2, what = "scatterplot")
 
 
-## ----fig.keep='none'------------------------------------------------------------
-plot(mod2, what = "scatterplot", dimens = c(1,2))
+## ----fig.keep='none'--------------------------------------------------------
+plot(mod2, what = "scatterplot", dimens = c(1, 2))
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mod3 <- MclustDA(X_train, Class_train, G = 2, modelNames = "EEE")
 summary(mod3, newdata = X_test, newclass = Class_test)
 
 
-## ----cvmclustda_ce, echo=-1, cache=TRUE-----------------------------------------
+## ----cvmclustda_ce, echo=-1, cache=TRUE-------------------------------------
 set.seed(20190520)
 cv1 <- cvMclustDA(mod1)
 str(cv1)
@@ -71,15 +71,15 @@ cv2 <- cvMclustDA(mod2)
 str(cv2)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 unlist(cv1[c("ce", "se.ce", "brier", "se.brier")])
 unlist(cv2[c("ce", "se.ce", "brier", "se.brier")])
 
 
-## ----cvmclustda, echo=-1, cache=TRUE--------------------------------------------
+## ----cvmclustda, echo=-1, cache=TRUE----------------------------------------
 set.seed(2)
 models <- mclust.options("emModelNames")
-tab_CE <- tab_Brier <- matrix(NA, nrow = length(models)+1, ncol = 5)
+tab_CE <- tab_Brier <- matrix(as.double(NA), nrow = length(models)+1, ncol = 5)
 rownames(tab_CE) <- rownames(tab_Brier) <- 
   c(paste0("EDDA[", models, "]"), "MCLUSTDA")
 colnames(tab_CE) <- colnames(tab_Brier) <- 
@@ -91,42 +91,42 @@ for (i in seq(models))
   pred <- predict(mod, X)
   cv <- cvMclustDA(mod, nfold = 10, verbose = FALSE)
   #
-  tab_CE[i,1] <- classError(pred$classification, Class)$errorRate
-  tab_CE[i,2] <- cv$ce
-  tab_CE[i,3] <- cv$se.ce
-  tab_CE[i,4] <- cv$ce - cv$se.ce
-  tab_CE[i,5] <- cv$ce + cv$se.ce
+  tab_CE[i, 1] <- classError(pred$classification, Class)$errorRate
+  tab_CE[i, 2] <- cv$ce
+  tab_CE[i, 3] <- cv$se.ce
+  tab_CE[i, 4] <- cv$ce - cv$se.ce
+  tab_CE[i, 5] <- cv$ce + cv$se.ce
   #
-  tab_Brier[i,1] <- BrierScore(pred$z, Class)
-  tab_Brier[i,2] <- cv$brier
-  tab_Brier[i,3] <- cv$se.brier
-  tab_Brier[i,4] <- cv$brier - cv$se.brier
-  tab_Brier[i,5] <- cv$brier + cv$se.brier
+  tab_Brier[i, 1] <- BrierScore(pred$z, Class)
+  tab_Brier[i, 2] <- cv$brier
+  tab_Brier[i, 3] <- cv$se.brier
+  tab_Brier[i, 4] <- cv$brier - cv$se.brier
+  tab_Brier[i, 5] <- cv$brier + cv$se.brier
 }
 i <- length(models)+1
 mod <- MclustDA(X, Class, modelType = "MclustDA", verbose = FALSE)
 pred <- predict(mod, X)
 cv <- cvMclustDA(mod, nfold = 10, verbose = FALSE)
 #
-tab_CE[i,1] <- classError(pred$classification, Class)$errorRate
-tab_CE[i,2] <- cv$ce
-tab_CE[i,3] <- cv$se.ce
-tab_CE[i,4] <- cv$ce - cv$se.ce
-tab_CE[i,5] <- cv$ce + cv$se.ce
+tab_CE[i, 1] <- classError(pred$classification, Class)$errorRate
+tab_CE[i, 2] <- cv$ce
+tab_CE[i, 3] <- cv$se.ce
+tab_CE[i, 4] <- cv$ce - cv$se.ce
+tab_CE[i, 5] <- cv$ce + cv$se.ce
 #
-tab_Brier[i,1] <- BrierScore(pred$z, Class)
-tab_Brier[i,2] <- cv$brier
-tab_Brier[i,3] <- cv$se.brier
-tab_Brier[i,4] <- cv$brier - cv$se.brier
-tab_Brier[i,5] <- cv$brier + cv$se.brier
+tab_Brier[i, 1] <- BrierScore(pred$z, Class)
+tab_Brier[i, 2] <- cv$brier
+tab_Brier[i, 3] <- cv$se.brier
+tab_Brier[i, 4] <- cv$brier - cv$se.brier
+tab_Brier[i, 5] <- cv$brier + cv$se.brier
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 tab_CE
 
 
 ## ----cvmclustda_fig1, fig.width=6, fig.height=4, out.width="\\textwidth", fig.cap="Training and cross-validated misclassification error rates of Gaussian mixture classification models for the breast cancer data."----
-library(ggplot2)
+library("ggplot2")
 df <- data.frame(rownames(tab_CE), tab_CE)
 colnames(df) <- c("model", "train", "cv", "se", "lower", "upper")
 df$model <- factor(df$model, levels = rev(df$model))
@@ -134,7 +134,7 @@ ggplot(df, aes(x = model, y = cv, ymin = lower, ymax = upper)) +
   geom_point(aes(shape = "s1", color = "c1")) + 
   geom_errorbar(width = 0.5, col = "dodgerblue3") + 
   geom_point(aes(y = train, shape = "s2", color = "c2")) +
-  scale_y_continuous(breaks = seq(0,0.2,by=0.01), lim = c(0,NA)) +
+  scale_y_continuous(breaks = seq(0, 0.2, by = 0.01), lim = c(0, NA)) +
   scale_color_manual(name = "", 
                      breaks = c("c1", "c2"),
                      values = c("dodgerblue3", "black"),
@@ -147,7 +147,7 @@ ggplot(df, aes(x = model, y = cv, ymin = lower, ymax = upper)) +
   theme(legend.position = "top")
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 tab_Brier
 
 
@@ -159,7 +159,7 @@ ggplot(df, aes(x = model, y = cv, ymin = lower, ymax = upper)) +
   geom_point(aes(shape = "s1", color = "c1")) + 
   geom_errorbar(width = 0.5, col = "dodgerblue3") + 
   geom_point(aes(y = train, shape = "s2", color = "c2")) +
-  scale_y_continuous(breaks = seq(0,0.2,by=0.01), lim = c(0,NA)) +
+  scale_y_continuous(breaks = seq(0, 0.2, by = 0.01), lim = c(0, NA)) +
   scale_color_manual(name = "", 
                      breaks = c("c1", "c2"),
                      values = c("dodgerblue3", "black"),
@@ -172,34 +172,34 @@ ggplot(df, aes(x = model, y = cv, ymin = lower, ymax = upper)) +
   theme(legend.position = "top")
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 # confusion matrix
 (tab <- table(Predict = cv1$classification, Class = Class_train))
-tab[2,2]/sum(tab[,2])  # sensitivity
-tab[1,1]/sum(tab[,1])  # specificity
+tab[2, 2]/sum(tab[, 2])  # sensitivity
+tab[1, 1]/sum(tab[, 1])  # specificity
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 threshold <- seq(0, 1, by = 0.01)
 sensitivity <- specificity <- rep(NA, length(threshold))
 for(i in 1:length(threshold))
 {
-  pred <- factor(ifelse(cv1$z[,"M"] > threshold[i], "M", "B"),
+  pred <- factor(ifelse(cv1$z[, "M"] > threshold[i], "M", "B"),
                  levels = c("B", "M"))
   tab <- table(pred, Class_train)
-  sensitivity[i] <- tab[2,2]/sum(tab[,2])
-  specificity[i] <- tab[1,1]/sum(tab[,1])
+  sensitivity[i] <- tab[2, 2]/sum(tab[, 2])
+  specificity[i] <- tab[1, 1]/sum(tab[, 1])
 }
 
 
-## ----eval=FALSE-----------------------------------------------------------------
+## ----eval=FALSE-------------------------------------------------------------
 ## plot(1-specificity, sensitivity, type = "l", lwd = 2)  # ROC curve
 ## abline(h = c(0, 1), v = c(0, 1), lty = 3)  # limits of [0,1]x[0,1] region
 ## abline(a = 0, b = 1, lty = 2)  # line of random classification
 
 
-## ----echo=-1--------------------------------------------------------------------
-# ModelMetrics::auc(ifelse(Class_train=="M", 1, 0), cv1$z[,2])
+## ----echo=-1----------------------------------------------------------------
+# ModelMetrics::auc(ifelse(Class_train=="M", 1, 0), cv1$z[, 2])
 auc_approx <- function(tpr, fpr)
 {
   x <- 1-fpr
@@ -212,16 +212,16 @@ auc_approx <- function(tpr, fpr)
 auc_approx(tpr = sensitivity, fpr = 1-specificity)
 
 
-## ----echo=FALSE-----------------------------------------------------------------
+## ----echo=FALSE-------------------------------------------------------------
 threshold <- seq(0, 1, by = 0.01)
 sensitivity2 <- specificity2 <- rep(NA, length(threshold))
 for(i in 1:length(threshold))
 {
-  pred <- factor(ifelse(cv2$z[,"M"] > threshold[i], "M", "B"),
+  pred <- factor(ifelse(cv2$z[, "M"] > threshold[i], "M", "B"),
                  levels = c("B", "M"))
   tab <- table(pred, Class_train)
-  sensitivity2[i] <- tab[2,2]/sum(tab[,2])
-  specificity2[i] <- tab[1,1]/sum(tab[,1])
+  sensitivity2[i] <- tab[2, 2]/sum(tab[, 2])
+  specificity2[i] <- tab[1, 1]/sum(tab[, 1])
 }
 
 
@@ -235,7 +235,7 @@ abline(h = c(0, 1), v = c(0, 1), lty = 3)
 abline(a = 0, b = 1, lty = 2)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 J <- sensitivity + specificity - 1 
 threshold[which.max(J)]     # optimal threshold
 sensitivity[which.max(J)]   # sensitivity at optimal threshold
@@ -243,8 +243,8 @@ specificity[which.max(J)]   # specificity at optimal threshold
 
 
 ## ----bankruptcy1, fig.width=7, fig.height=6, out.width="0.7\\textwidth", fig.cap="Scatterplot of financial ratios with points distinguished by observed classes."----
-data(bankruptcy, package = "MixGHD")
-X <- bankruptcy[,-1]
+data("bankruptcy", package = "MixGHD")
+X <- bankruptcy[, -1]
 Class <- factor(bankruptcy$Y, levels = c(1:0), 
                 labels = c("solvent", "bankrupt"))
 cl <- clPairs(X, Class)
@@ -252,7 +252,7 @@ legend("bottomright", legend = cl$class,
        pch = cl$pch, col = cl $col, inset = 0.02)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mod <- MclustDA(X, Class, modelType = "EDDA")
 summary(mod)
 
@@ -262,7 +262,7 @@ plot(mod, what = "scatterplot")
 plot(mod, what = "error")
 
 
-## ----echo=FALSE, eval=FALSE-----------------------------------------------------
+## ----echo=FALSE, eval=FALSE-------------------------------------------------
 ## pred <- predict(mod)
 ## table(Class, Predicted = pred$classification)
 ## 
@@ -273,21 +273,21 @@ plot(mod, what = "error")
 ## sum(tab * C) # Total cost of misclassification
 
 
-## -------------------------------------------------------------------------------
-(C <- matrix(c(0,1,10,0), nrow = 2, ncol = 2, byrow = TRUE))
+## ---------------------------------------------------------------------------
+(C <- matrix(c(0, 1, 10, 0), nrow = 2, ncol = 2, byrow = TRUE))
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 rowSums(C)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 pred <- predict(mod)
 (tab <- table(Class, Predicted = pred$classification))
 sum(tab * C)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 pred <- predict(mod, prop = mod$prop*rowSums(C))
 (tab <- table(Class, Predicted = pred$classification))
 sum(tab * C)
@@ -324,18 +324,18 @@ hist(x_test[class_test == 1], breaks = 11, add = TRUE,
 box()
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mod <- MclustDA(x_train, class_train)
 summary(mod, parameters = TRUE)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 pred <- predict(mod, newdata = x_test)
 classError(pred$classification, class_test)$error
 BrierScore(pred$z, class_test)
 
 
-## ----simimbal, cache=TRUE-------------------------------------------------------
+## ----simimbal, cache=TRUE---------------------------------------------------
 priorProp <- seq(0.01, 0.99, by = 0.01)
 CE <- BS <- rep(as.double(NA), length(priorProp))
 for (i in seq(priorProp))
@@ -348,12 +348,12 @@ for (i in seq(priorProp))
 
 
 ## ----simimbal2, fig.width=6, fig.height=5, out.width="0.7\\textwidth",fig.cap="Classification error and Brier score as functions of the prior probability for the minority class. The vertical segments show the biased sample proportion of cases in the training set (dashed line), and the sample proportion of cases in the test set (dotted line), which is usually unknown."----
-matplot(priorProp, cbind(CE,BS), type = "l", lty = 1, lwd = 2, xaxt = "n",
-        xlab = "Class prior probability", ylab = "", ylim = c(0,max(CE,BS)), 
+matplot(priorProp, cbind(CE, BS), type = "l", lty = 1, lwd = 2, xaxt = "n",
+        xlab = "Class prior probability", ylab = "", ylim = c(0, max(CE, BS)), 
         col = c("red3", "dodgerblue3"),
         panel.first = 
-          { abline(h = seq(0,1,by=0.05), col = "grey", lty = 3)
-            abline(v = seq(0,1,by=0.05), col = "grey", lty = 3) 
+          { abline(h = seq(0, 1, by = 0.05), col = "grey", lty = 3)
+            abline(v = seq(0, 1, by = 0.05), col = "grey", lty = 3) 
           })
 axis(side = 1, at = seq(0, 1, by = 0.1))
 abline(v = mod$prop[2],             # training proportions
@@ -364,28 +364,28 @@ legend("topleft", legend = c("ClassError", "BrierScore"),
        col = c("red3", "dodgerblue3"), lty = 1, lwd = 2, inset = 0.02)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 (priorProbs <- classPriorProbs(mod, x_test))
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 pred <- predict(mod, newdata = x_test, prop = priorProbs)
 classError(pred$classification, class = class_test)$error
 BrierScore(pred$z, class_test)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 (prior_test <- prop.table(table(class_test)))
 pred <- predict(mod, newdata = x_test, prop = prior_test)
 classError(pred$classification, class = class_test)$error
 BrierScore(pred$z, class_test)
 
 
-## -------------------------------------------------------------------------------
-data(wdbc, package="mclust")
+## ---------------------------------------------------------------------------
+data("wdbc", package = "mclust")
 x <- with(wdbc, 
     0.2322*Texture_mean + 0.01117*Area_extreme + 68.37*Smoothness_extreme)
-Class <- wdbc[,"Diagnosis"]
+Class <- wdbc[, "Diagnosis"]
 mod <- MclustDA(x, Class, modelType = "MclustDA")
 summary(mod)
 
@@ -404,35 +404,35 @@ legend("topright", title = "Diagnosis:", legend = names(prop),
        col = col, lty = 1, inset = 0.02)
 
 
-## ----echo=-1--------------------------------------------------------------------
+## ----echo=-1----------------------------------------------------------------
 set.seed(20190520)
 cv <- cvMclustDA(mod)  # by default: prop = mod$prop
 unlist(cv[c("ce", "se.ce")])
 
 
-## ----echo=-1--------------------------------------------------------------------
+## ----echo=-1----------------------------------------------------------------
 set.seed(20190520)
 cv <- cvMclustDA(mod, prop = c(0.5, 0.5))
 unlist(cv[c("ce", "se.ce")])
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 x0 <- seq(min(x), max(x), length = 1000)
 pred <- predict(mod, newdata = x0) 
-(threshold1 <- approx(pred$z[,2], x0, xout = 0.5)$y)
+(threshold1 <- approx(pred$z[, 2], x0, xout = 0.5)$y)
 pred <- predict(mod, newdata = x0, prop = c(0.5, 0.5))
-(threshold2 <- approx(pred$z[,2], x0, xout = 0.5)$y)
+(threshold2 <- approx(pred$z[, 2], x0, xout = 0.5)$y)
 
 
 ## ----wdbcuniv2, echo=-1, fig.width=8, fig.height=4, out.width="\\textwidth", fig.cap="Distribution of the training data conditional on the true classes and on the predicted classes for the univariate feature extracted from the breast cancer data."----
-par(mfrow=c(1,2))
+par(mfrow=c(1, 2))
 plot(mod, what = "scatterplot", main = TRUE)
 abline(v = threshold1, lty = 2)
 plot(mod, what = "classification", main = TRUE)
 abline(v = threshold1, lty = 2)
 
 
-## ----eval=FALSE, echo=FALSE-----------------------------------------------------
+## ----eval=FALSE, echo=FALSE-------------------------------------------------
 ## z <- predict(mod, newdata = x0)$z
 ## matplot(x0, z, type = "n", yaxt = "n")
 ## axis(side = 2, at = seq(0, 1, by = 0.1))
@@ -454,7 +454,7 @@ cv <- data.frame(threshold, error = numeric(ngrid))
 cverr <- cvMclustDA(mod, verbose = FALSE)
 for (i in seq(threshold))
 {
-  cv$error[i] <- classError(ifelse(cverr$z[,2] > threshold[i], "M", "B"),
+  cv$error[i] <- classError(ifelse(cverr$z[, 2] > threshold[i], "M", "B"),
                             Class)$errorRate
 }  
 min(cv$error)
@@ -462,7 +462,7 @@ threshold[which.min(cv$error)]
 
 ggplot(cv, aes(x = threshold, y = error)) +
   geom_point() + geom_line() +
-  scale_x_continuous(breaks = seq(0,1,by=0.1)) +
+  scale_x_continuous(breaks = seq(0, 1, by = 0.1)) +
   ylab("CV misclassification error") + 
   xlab("Threshold probability of class (M)")
 
@@ -486,7 +486,7 @@ priorProb[which.min(cv_error2$cv)]
 
 ggplot(cv_error2, aes(x = priorProb, y = cv, ymin = lower, ymax = upper)) +
   geom_point() + geom_linerange() +
-  scale_x_continuous(breaks = seq(0,1,by=0.1)) +
+  scale_x_continuous(breaks = seq(0, 1, by = 0.1)) +
   ylab("CV misclassification error") + 
   xlab("Class (M) prior probability")
 
@@ -494,13 +494,13 @@ ggplot(cv_error2, aes(x = priorProb, y = cv, ymin = lower, ymax = upper)) +
 ## ----ssc_example, echo=FALSE, fig.width=5.5, fig.height=5, out.width="0.49\\textwidth", fig.subcap = rep("",2), fig.cap="Example of two-class simulated dataset with (a) all labeled data (points are marked according to the true classes) and (b) only partial knowledge of labeled data (unlabeled data are shown as grey squares)."----
 n <- 200
 pars <- list(pro = c(0.5, 0.5),
-             mean = matrix(c(-1,1), nrow = 2, ncol = 2, byrow = TRUE),
+             mean = matrix(c(-1, 1), nrow = 2, ncol = 2, byrow = TRUE),
              variance = mclustVariance("EII", d = 2, G = 2))
 pars$variance$sigmasq <- 1
 data <- sim("EII", parameters = pars, n = n, seed = 12)
-class <- data[,1]
-X <- data[,-1]
-clPairs(X, class, symbols = c(1,2))
+class <- data[, 1]
+X <- data[, -1]
+clPairs(X, class, symbols = c(1, 2))
 
 # Randomly remove labels
 cl <- class; cl[sample(1:n, size = 195)] <- NA
@@ -511,7 +511,7 @@ clPairs(X, ifelse(is.na(cl), 0, class),
 
 ## ----ssc_example2, echo=FALSE, fig.width=5.5, fig.height=5, out.width="0.7\\textwidth", fig.cap="Classification boundaries for the two-class simulated dataset obtained (i) under the assumption of full knowledge of class labels (cyan solid line), (ii) using only the labeled data (black dashed line), and (iii) both labeled and unlabeled data (black dotted line)."----
 mod      <- MclustDA(X, class, modelType = "EDDA") 
-mod_EDDA <- MclustDA(X[!is.na(cl),], cl[!is.na(cl)], modelType = "EDDA", modelNames = "EII")
+mod_EDDA <- MclustDA(X[!is.na(cl), ], cl[!is.na(cl)], modelType = "EDDA", modelNames = "EII")
 mod_SSC  <- MclustSSC(X, cl)
 
 ngrid = 100
@@ -528,30 +528,30 @@ pch = class
 pch[!is.na(cl)] = ifelse(cl[!is.na(cl)] == 1, 19, 17)
 
 plot(X, pch = pch, col = col)
-contour(xgrid, ygrid, matrix(pred_mod$z[,1], ngrid, ngrid), 
+contour(xgrid, ygrid, matrix(pred_mod$z[, 1], ngrid, ngrid), 
         add = TRUE, levels = 0.5, drawlabels = FALSE, lwd = 2, col = "cyan2")
-contour(xgrid, ygrid, matrix(pred_EDDA$z[,1], ngrid, ngrid), 
+contour(xgrid, ygrid, matrix(pred_EDDA$z[, 1], ngrid, ngrid), 
         add = TRUE, levels = 0.5, drawlabels = FALSE, lty = 2, lwd = 2)
-contour(xgrid, ygrid, matrix(pred_SSC$z[,1], ngrid, ngrid), 
+contour(xgrid, ygrid, matrix(pred_SSC$z[, 1], ngrid, ngrid), 
         add = TRUE, levels = 0.5, drawlabels = FALSE, lty = 3, lwd = 2)
 
 
-## -------------------------------------------------------------------------------
-data(olive, package = "pgmm")
-X <- olive[,3:10]
+## ---------------------------------------------------------------------------
+data("olive", package = "pgmm")
+X <- olive[, 3:10]
 class <- factor(olive$Region, levels = 1:3, 
                 labels = c("South", "Sardinia", "North"))
 table(class)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mod_EDDA_full <- MclustDA(X, class, modelType = "EDDA")
 pred_EDDA_full <- predict(mod_EDDA_full, newdata = X)
 classError(pred_EDDA_full$classification, class)$errorRate
 BrierScore(pred_EDDA_full$z, class)
 
 
-## ----echo=-1--------------------------------------------------------------------
+## ----echo=-1----------------------------------------------------------------
 set.seed(20200807)
 pct_labeled_data <- 10
 n <- nrow(X)
@@ -567,12 +567,12 @@ mod_SSC$BIC
 pickBIC(mod_SSC$BIC, 5) - max(mod_SSC$BIC)  # BIC diff for the top-5 models
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 summary(mod_SSC)
 
 
-## -------------------------------------------------------------------------------
-pred_SSC <- predict(mod_SSC, newdata = X[is.na(cl),])
+## ---------------------------------------------------------------------------
+pred_SSC <- predict(mod_SSC, newdata = X[is.na(cl), ])
 table(Predicted = pred_SSC$classification, Class = class[is.na(cl)])
 classError(pred_SSC$classification, class[is.na(cl)])$errorRate
 BrierScore(pred_SSC$z, class[is.na(cl)])
@@ -589,24 +589,24 @@ for (i in seq(pct_labeled_data))
   labeled <- sample(1:n, round(n*pct_labeled_data[i]/100))
   cl[-labeled] <- NA
   # Classification on labeled data
-  mod_EDDA  <- MclustDA(X[labeled,], cl[labeled], 
+  mod_EDDA  <- MclustDA(X[labeled, ], cl[labeled], 
                         modelType = "EDDA")
   # prediction for the unlabeled data
-  pred_EDDA <- predict(mod_EDDA, newdata = X[-labeled,])
-  BS[i,1]   <- BrierScore(pred_EDDA$z, class[-labeled])
+  pred_EDDA <- predict(mod_EDDA, newdata = X[-labeled, ])
+  BS[i, 1]  <- BrierScore(pred_EDDA$z, class[-labeled])
   # Semi-supervised classification
   mod_SSC  <- MclustSSC(X, cl)
   # prediction for the unlabeled data
-  pred_SSC <- predict(mod_SSC, newdata = X[-labeled,])
-  BS[i,2]  <- BrierScore(pred_SSC$z, class[-labeled])
+  pred_SSC <- predict(mod_SSC, newdata = X[-labeled, ])
+  BS[i, 2] <- BrierScore(pred_SSC$z, class[-labeled])
 }
 BS
 
 matplot(pct_labeled_data, BS, type = "b", 
-        lty = 1, pch = c(19, 15), col = c(2,4), xaxt = "n",
+        lty = 1, pch = c(19, 15), col = c(2, 4), xaxt = "n",
         xlab = "Percentage of labeled data", ylab = "Brier score")
 axis(side = 1, at = pct_labeled_data)
 abline(h = BrierScore(pred_EDDA_full$z, class), lty = 2)
-legend("topright", pch = c(19, 15), col = c(2,4), lty = 1, 
+legend("topright", pch = c(19, 15), col = c(2, 4), lty = 1, 
        legend = c("EDDA", "SSC"), inset = 0.02)
 

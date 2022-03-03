@@ -1,5 +1,5 @@
 ## ----chevron1, fig.width=6, fig.height=5, out.width="0.49\\textwidth", fig.subcap = c("", ""), fig.cap="Simulated minefield data (a), marked to distinguish the known noise (b)."----
-data(chevron, package = "mclust")
+data("chevron", package = "mclust")
 summary(chevron)
 noise <- with(chevron, class == "noise")
 X <- chevron[,2:3]
@@ -8,38 +8,38 @@ plot(X, cex = 0.5, col = ifelse(noise, "grey", "black"),
      pch = ifelse(noise, 3, 1))
 
 
-## ----fig.keep="none"------------------------------------------------------------
-library(prabclus)
+## ----fig.keep="none"--------------------------------------------------------
+library("prabclus")
 nnc <- NNclean(X, k = 5)
 table(nnc$z)
 clPairs(X, nnc$z, colors = c("darkgrey", "black"), symbols = c(3, 1))
 
 
-## ----fig.keep="none"------------------------------------------------------------
+## ----fig.keep="none"--------------------------------------------------------
 modNoise <- Mclust(X, initialization = list(noise = (nnc$z == 0)))
 summary(modNoise$BIC)
 
 
-## ----fig.keep="none"------------------------------------------------------------
+## ----fig.keep="none"--------------------------------------------------------
 summary(modNoise, parameters = TRUE)
 addmargins(table(chevron$class, modNoise$classification), 2)
 plot(modNoise, what = "classification")
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 clPairs(X, nnc$z, colors = c("darkgrey", "black"), symbols = c(3, 1))
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(modNoise, what = "classification")
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 hypvol(X)
 
 
-## -------------------------------------------------------------------------------
-library(cluster)
+## ---------------------------------------------------------------------------
+library("cluster")
 ehull <- ellipsoidhull(as.matrix(X))
 volume(ehull)
 modNoise.ehull <- Mclust(X, Vinv = 1/volume(ehull),
@@ -49,13 +49,13 @@ tab <- table(chevron$class, modNoise.ehull$classification)
 addmargins(tab, 2)
 
 
-## -------------------------------------------------------------------------------
-library(geometry)
+## ---------------------------------------------------------------------------
+library("geometry")
 chull <- convhulln(X, options = "FA")
 chull$vol
 
 
-## ----cache=TRUE-----------------------------------------------------------------
+## ----cache=TRUE-------------------------------------------------------------
 modNoise.chull <- Mclust(X, Vinv = 1/chull$vol,
                          initialization = list(noise = (nnc$z == 0)))
 summary(modNoise.chull)
@@ -63,13 +63,13 @@ tab <- table(chevron$class, modNoise.chull$classification)
 addmargins(tab, 2)
 
 
-## -------------------------------------------------------------------------------
-library(covRobust)
+## ---------------------------------------------------------------------------
+library("covRobust")
 nnve <- cov.nnve(X, k = 5)
 table(nnve$classification)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 modNoise.nnve <- Mclust(X, initialization = 
                              list(noise = (nnve$classification == 0)))
 summary(modNoise.nnve$BIC)
@@ -77,24 +77,24 @@ summary(modNoise.nnve)
 addmargins(table(chevron$class, modNoise.nnve$classification), 2)
 
 
-## ----echo=-1, fig.keep="none"---------------------------------------------------
+## ----echo=-1, fig.keep="none"-----------------------------------------------
 set.seed(123)
-(Sigma <- array(c(2,0.5,0.5,0.5, 1,0,0,0.1, 2,-0.5,-0.5,0.5), 
-                dim = c(2,2,3)))
+(Sigma <- array(c(2, 0.5, 0.5, 0.5, 1, 0, 0, 0.1, 2, -0.5, -0.5, 0.5), 
+                dim = c(2, 2, 3)))
 var.decomp <- sigma2decomp(Sigma)
 str(var.decomp)
 par <- list(pro = c(1/3, 1/3, 1/3), 
-            mean = cbind(c(0,3), c(3,0), c(-3,0)),
+            mean = cbind(c(0, 3), c(3, 0), c(-3, 0)),
             variance = var.decomp)
 data <- sim(par$variance$modelName, parameters = par, n = 200)
 noise <- matrix(runif(100, -10, 10), nrow = 50, ncol = 2)
-X <- rbind(data[,2:3], noise)
-cluster <- c(data[,1], rep(0, 50))
+X <- rbind(data[, 2:3], noise)
+cluster <- c(data[, 1], rep(0, 50))
 clPairs(X, ifelse(cluster == 0, 0, 1), 
-        colors = "black", symbols = c(16,1), cex = c(0.5,1))
+        colors = "black", symbols = c(16, 1), cex = c(0.5, 1))
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 nnc <- NNclean(X, k = 5)
 modNoise <- Mclust(X, 
   initialization = list(noise = (nnc$z == 0)))
@@ -102,28 +102,28 @@ summary(modNoise$BIC)
 summary(modNoise, parameters = TRUE)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 clPairs(X, ifelse(cluster == 0, 0, 1), 
-        colors = "black", symbols = c(16,1), cex = c(0.5,1))
+        colors = "black", symbols = c(16, 1), cex = c(0.5, 1))
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(modNoise, what = "classification")
 
 
-## ----fig.keep="none"------------------------------------------------------------
+## ----fig.keep="none"--------------------------------------------------------
 plot(modNoise, what = "classification")
 table(cluster, Classification = modNoise$classification)
 
 
-## ----galaxies-------------------------------------------------------------------
-data(galaxies, package = "MASS") 
-# this fix a typographic error in the data, see help(galaxies, package = "MASS")
+## ----galaxies---------------------------------------------------------------
+data("galaxies", package = "MASS") 
+# this fix a typographic error in the data, see help("galaxies", package = "MASS")
 galaxies[78] <- 26960 
 galaxies <- galaxies / 1000
 
 
-## ----echo=-1, fig.keep="none"---------------------------------------------------
+## ----echo=-1, fig.keep="none"-----------------------------------------------
 set.seed(20190410)
 BIC <- NULL
 for(i in 1:50)
@@ -142,16 +142,16 @@ plot(mod, what = "density", data = galaxies, breaks = 11)
 rug(galaxies)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(BIC)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(mod, what = "density", data = galaxies, breaks = 11)
 rug(galaxies)
 
 
-## ----echo=-1, fig.keep="none"---------------------------------------------------
+## ----echo=-1, fig.keep="none"-----------------------------------------------
 set.seed(20190411)
 BICp <- NULL
 for(i in 1:50)
@@ -171,21 +171,21 @@ plot(modp, what = "density", data = galaxies, breaks = 11)
 rug(galaxies)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(BICp)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(modp, what = "density", data = galaxies, breaks = 11)
 rug(galaxies)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 defaultPrior(galaxies, G = 3, modelName = "V")
 
 
-## ----olive oil------------------------------------------------------------------
-data(olive, package = "pgmm")
+## ----olive oil--------------------------------------------------------------
+data("olive", package = "pgmm")
 # recode of labels for Region and Area
 olive$Region <- factor(olive$Region, levels = 1:3, 
                        labels = c("South", "Sardinia", "North"))
@@ -196,8 +196,8 @@ olive$Area <- factor(olive$Area, levels = 1:9,
 with(olive, table(Area, Region))
 
 
-## ----oliveoil01, fig.keep="none"------------------------------------------------
-X <- scale(olive[,3:10])
+## ----oliveoil01, fig.keep="none"--------------------------------------------
+X <- scale(olive[, 3:10])
 
 BIC <- mclustBIC(X, G = 1:15)
 summary(BIC)
@@ -208,15 +208,15 @@ summary(BICp)
 plot(BICp, legendArgs = list(x = "bottomright", ncol = 5))
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(BIC, legendArgs = list(x = "bottomright", ncol = 5))
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(BICp, legendArgs = list(x = "bottomright", ncol = 5))
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mod <- Mclust(X, x = BIC)
 summary(mod)
 
@@ -227,7 +227,7 @@ table(Area = olive$Area, cluster = mod$classification)
 adjustedRandIndex(olive$Area, mod$classification)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 modp <- Mclust(X, x = BICp)
 summary(modp)
 
@@ -239,22 +239,22 @@ adjustedRandIndex(olive$Area, modp$classification)
 
 
 ## ----ex4-1_fig1, fig.width=6, fig.height=5, out.width="0.6\\textwidth", fig.cap="The \\code{ex4.1}\\ simulated dataset."----
-data(Baudry_etal_2010_JCGS_examples, package = "mclust")
+data("Baudry_etal_2010_JCGS_examples", package = "mclust")
 plot(ex4.1)
 
 
-## ----cache=TRUE-----------------------------------------------------------------
+## ----cache=TRUE-------------------------------------------------------------
 mod_ex4.1 <- Mclust(ex4.1)
 summary(mod_ex4.1)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 CLUSTCOMBI <- clustCombi(mod_ex4.1)
 summary(CLUSTCOMBI)
 
 
 ## ----ex4-1_clustcombi, fig.width=6, fig.height=9, out.width="\\textwidth", fig.cap="Hierarchy of mixture component combinations for the \\code{ex4.1}\\ dataset."----
-par(mfrow = c(3,2), mar = c(4,4,3,1))
+par(mfrow = c(3, 2), mar = c(4, 4, 3, 1))
 plot(CLUSTCOMBI, ex4.1, what = "classification")
 
 
@@ -268,56 +268,56 @@ optimClust <- clustCombiOptim(CLUSTCOMBI, reg = 2, plot = TRUE)
 str(optimClust)
 
 
-## ----fig.keep="none"------------------------------------------------------------
-data(faithful, package = "datasets")
+## ----fig.keep="none"--------------------------------------------------------
+data("faithful", package = "datasets")
 mod <- Mclust(faithful)
 clPairs(faithful, mod$classification)
 plot(as.densityMclust(mod), what = "density", add = TRUE)
 
 
-## ----fig.keep="none", cache=TRUE------------------------------------------------
+## ----fig.keep="none", cache=TRUE--------------------------------------------
 GMMHD <- gmmhd(mod)
 summary(GMMHD)
 
 
-## ----fig.keep="none"------------------------------------------------------------
+## ----fig.keep="none"--------------------------------------------------------
 plot(GMMHD, what = "mode")
 plot(GMMHD, what = "cores")
 plot(GMMHD, what = "clusters")
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 clPairs(faithful, mod$classification)
 plot(as.densityMclust(mod), what = "density", add = TRUE)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(GMMHD, what = "mode")
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(GMMHD, what = "cores")
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 plot(GMMHD, what = "clusters")
 
 
-## ----cache=TRUE-----------------------------------------------------------------
-data(yeast, package="MixSAL")
+## ----cache=TRUE-------------------------------------------------------------
+data("yeast", package = "MixSAL")
 dup <- duplicated(yeast)
 sum(dup) # count replicated observations
-mod <- Mclust(yeast[!dup,-1])
+mod <- Mclust(yeast[!dup, -1])
 summary(mod)
 adjustedRandIndex(yeast$Site[!dup], mod$classification)
 
 
-## ----cache=TRUE-----------------------------------------------------------------
+## ----cache=TRUE-------------------------------------------------------------
 GMMHD <- gmmhd(mod)
 summary(GMMHD)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 table(yeast$Site[!dup], cluster = GMMHD$cluster)
 adjustedRandIndex(yeast$Site[!dup], GMMHD$cluster)
 
@@ -333,8 +333,8 @@ plot(GMMHD, what = "clusters",
      col = c("red3", "dodgerblue2"), pch = c(17, 16))
 
 
-## ----cache=TRUE-----------------------------------------------------------------
-data(Baudry_etal_2010_JCGS_examples, package = "mclust")
+## ----cache=TRUE-------------------------------------------------------------
+data("Baudry_etal_2010_JCGS_examples", package = "mclust")
 mod <- Mclust(ex4.1)
 GMMHD <- gmmhd(mod)
 summary(GMMHD)
@@ -342,7 +342,7 @@ optimClust <- clustCombiOptim(clustCombi(mod), reg = 2)
 table(GMMHD = GMMHD$cluster, CLUSTCOMBI = optimClust$cluster)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mod <- Mclust(faithful)
 sim0 <- sim(modelName = mod$modelName, 
             parameters = mod$parameters,
@@ -352,37 +352,37 @@ sim1 <- sim(modelName = mod$modelName,
             n = nrow(faithful), seed = 1)
 
 
-## ----fig.keep="none"------------------------------------------------------------
-xlim <- range(c(faithful[,1],sim0[,2],sim1[,2]))
-ylim <- range(c(faithful[,2],sim0[,3],sim1[,3]))
+## ----fig.keep="none"--------------------------------------------------------
+xlim <- range(c(faithful[, 1], sim0[, 2], sim1[, 2]))
+ylim <- range(c(faithful[, 2], sim0[, 3], sim1[, 3]))
 
-mclust2Dplot(data = sim0[,-1], parameters = mod$parameters,
-             classification = sim0[,1], xlim = xlim, ylim = ylim)
+mclust2Dplot(data = sim0[, -1], parameters = mod$parameters,
+             classification = sim0[, 1], xlim = xlim, ylim = ylim)
 
-mclust2Dplot(data = sim1[,-1], parameters = mod$parameters,
-             classification = sim1[,1], xlim = xlim, ylim = ylim)
+mclust2Dplot(data = sim1[, -1], parameters = mod$parameters,
+             classification = sim1[, 1], xlim = xlim, ylim = ylim)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 head(sim0)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 par <- list(
   pro = c(0.5, 0.3, 0.2),
-  mean = matrix(c(0,0,3,3,-4,1), nrow = 2, ncol = 3),
-  variance = sigma2decomp(matrix(c(1,0.6,0.6,1.5), nrow = 2, ncol = 2), 
+  mean = matrix(c(0, 0, 3, 3, -4, 1), nrow = 2, ncol = 3),
+  variance = sigma2decomp(matrix(c(1, 0.6, 0.6, 1.5), nrow = 2, ncol = 2), 
                           G = 3))
 str(par)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 sim <- sim(modelName = "EEI", parameters = par, n = 10000, seed = 123)
-cluster <- sim[,1]
-x <- sim[,2:3]
+cluster <- sim[, 1]
+x <- sim[, 2:3]
 
 
-## ----eval=FALSE-----------------------------------------------------------------
+## ----eval=FALSE-------------------------------------------------------------
 ## mclust.options(subset = Inf)  # no subsetting
 ## system.time(mod1 <- Mclust(x))
 ## ##    user  system elapsed
@@ -414,7 +414,7 @@ x <- sim[,2:3]
 ## ## BIC diff      0.00     -7.874412    -17.62078
 
 
-## ----eval=FALSE-----------------------------------------------------------------
+## ----eval=FALSE-------------------------------------------------------------
 ## table(mod1$classification, mod2$classification)
 ## ##       1    2    3
 ## ##  1 5090    0    0
@@ -422,15 +422,15 @@ x <- sim[,2:3]
 ## ##  3   10 1893    0
 
 
-## -------------------------------------------------------------------------------
-data(stlouis, package = "mix")
-x <- data.frame(stlouis[,-(1:3)], row.names = NULL)
+## ---------------------------------------------------------------------------
+data("stlouis", package = "mix")
+x <- data.frame(stlouis[, -(1:3)], row.names = NULL)
 table(complete.cases(x))
 apply(x, 2, function(x) prop.table(table(complete.cases(x))))
 
 
 ## ----stlouis_missing, fig.width=6, fig.height=6, out.width="0.7\\textwidth", fig.cap="Image plot of the missing values pattern for the \\code{stlouis}\\ dataset."----
-library(ggplot2)
+library("ggplot2")
 df <- data.frame(obs = rep(1:nrow(x), times = ncol(x)),
                  var = rep(colnames(x), each = nrow(x)),
                  missing = as.vector(is.na(x)))
@@ -444,7 +444,7 @@ ggplot(data = df, aes(x = var, y = obs)) +
   theme(axis.text.y = element_blank())
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 ximp <- imputeData(x, seed = 123)
 
 
@@ -452,23 +452,23 @@ ximp <- imputeData(x, seed = 123)
 imputePairs(x, ximp)
 
 
-## -------------------------------------------------------------------------------
-x <- as.matrix(iris[,1:4])
+## ---------------------------------------------------------------------------
+x <- as.matrix(iris[, 1:4])
 mod <- Mclust(x, G = 3, modelNames = "EEE")
 table(iris$Species, mod$classification)
 adjustedRandIndex(iris$Species, mod$classification)
 mod$parameters$mean  # component means
 
 
-## ----echo=-1--------------------------------------------------------------------
+## ----echo=-1----------------------------------------------------------------
 set.seed(20171211)
-M <- sample(c(TRUE,FALSE), size = prod(dim(x)), 
-            replace = TRUE, prob = c(0.1,0.9))
+M <- sample(c(TRUE, FALSE), size = prod(dim(x)), 
+            replace = TRUE, prob = c(0.1, 0.9))
 x[M] <- NA
 table(cmpObs <- complete.cases(x))
 
 
-## ----echo=-1--------------------------------------------------------------------
+## ----echo=-1----------------------------------------------------------------
 set.seed(20171212)
 nImp  <- 100
 muImp <- array(NA, c(ncol(x), 3, nImp))
@@ -477,10 +477,10 @@ for(i in 1:nImp)
 { 
   xImp <- imputeData(x, verbose = FALSE)
   modImp <- Mclust(xImp, G = 3, modelNames = "EEE", verbose = FALSE)
-  if (i == 1) clImp[,i] <- modImp$classification
-  mcl <- matchCluster(clImp[,1], modImp$classification)
-  clImp[,i]  <- mcl$cluster
-  muImp[,,i] <- modImp$parameters$mean[,mcl$ord]
+  if (i == 1) clImp[, i] <- modImp$classification
+  mcl <- matchCluster(clImp[, 1], modImp$classification)
+  clImp[, i]  <- mcl$cluster
+  muImp[, , i] <- modImp$parameters$mean[, mcl$ord]
 }
 
 # majority rule

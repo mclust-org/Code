@@ -1,5 +1,5 @@
-## -------------------------------------------------------------------------------
-data(Snapper, package = "FSAdata")
+## ---------------------------------------------------------------------------
+data("Snapper", package = "FSAdata")
 x <- Snapper[,1]
 mod <- Mclust(x, G = 4, modelNames = "V")
 summary(mod, parameters = TRUE)
@@ -25,7 +25,7 @@ mclust2Dplot(data = faithful, what = "uncertainty",
              parameters = mod$parameters, z = mod$z)
 
 
-## ----eval=FALSE-----------------------------------------------------------------
+## ----eval=FALSE-------------------------------------------------------------
 ## surfacePlot(data = faithful, parameters = mod$parameters,
 ##             what = "density", type = "contour",
 ##             transformation = "log")
@@ -41,42 +41,42 @@ mclust2Dplot(data = faithful, what = "uncertainty",
 ##             transformation = "sqrt")
 
 
-## ----eval=FALSE, echo=FALSE-----------------------------------------------------
+## ----eval=FALSE, echo=FALSE-------------------------------------------------
 ## # Example fo tuning the col.palette arg
 ## surfacePlot(data = faithful, parameters = mod$parameters,
 ##              what = "density", type = "image",
 ##              col.palette = function(...) hcl.colors(..., "Geyser"))
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 surfacePlot(data = faithful, parameters = mod$parameters,
             what = "density", type = "contour",
             transformation = "log")
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 surfacePlot(data = faithful, parameters = mod$parameters,
             what = "density", type = "image")
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 surfacePlot(data = faithful, parameters = mod$parameters,
             what = "density", type = "persp")
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 surfacePlot(data = faithful, parameters = mod$parameters,
             what = "uncertainty", type = "image",
             transformation = "sqrt")
 
 
-## -------------------------------------------------------------------------------
-data(iris, package = "datasets")
+## ---------------------------------------------------------------------------
+data("iris", package = "datasets")
 mod <- Mclust(iris[,1:4], G = 3)
 summary(mod)
 
 
-## ----fig.keep="none"------------------------------------------------------------
+## ----fig.keep="none"--------------------------------------------------------
 coordProj(data = iris[,1:4], dimens = c(2,4), what = "classification",
           parameters = mod$parameters, z = mod$z)
 
@@ -87,22 +87,22 @@ coordProj(data = iris[,1:4], dimens = c(2,4), what = "error",
           parameters = mod$parameters, z = mod$z, truth = iris$Species)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 coordProj(data = iris[,1:4], dimens = c(2,4), what = "classification",
           parameters = mod$parameters, z = mod$z)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 coordProj(data = iris[,1:4], dimens = c(2,4), what = "uncertainty",
           parameters = mod$parameters, z = mod$z)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 coordProj(data = iris[,1:4], dimens = c(2,4), what = "error",
           parameters = mod$parameters, z = mod$z, truth = iris$Species)
 
 
-## ----echo=-1--------------------------------------------------------------------
+## ----echo=-1----------------------------------------------------------------
 set.seed(1)
 nrow(iris)
 Q <- randomOrthogonalMatrix(nrow(iris), 2)
@@ -111,27 +111,27 @@ QTQ <- crossprod(Q)                # equivalently t(Q) %*% Q
 zapsmall(QTQ)                      # 2 x 2 identity matrix
 
 
-## ----fig.keep="none"------------------------------------------------------------
+## ----fig.keep="none"--------------------------------------------------------
 randProj(data = iris[,1:4], seeds = c(1,13,79,201), what = "classification",
          parameters = mod$parameters, z = mod$z)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 randProj(data = iris[,1:4], seed = 1, what = "classification",
          parameters = mod$parameters, z = mod$z)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 randProj(data = iris[,1:4], seed = 13, what = "classification",
          parameters = mod$parameters, z = mod$z)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 randProj(data = iris[,1:4], seed = 79, what = "classification",
          parameters = mod$parameters, z = mod$z)
 
 
-## ----echo=FALSE, out.width="0.48\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.48\\textwidth"--------------------------------
 randProj(data = iris[,1:4], seed = 201, what = "classification",
          parameters = mod$parameters, z = mod$z)
 
@@ -140,8 +140,8 @@ randProj(data = iris[,1:4], seed = 201, what = "classification",
 crimcoords(iris[,1:4], mod$classification)
 
 
-## -------------------------------------------------------------------------------
-data(thyroid, package = "mclust")
+## ---------------------------------------------------------------------------
+data("thyroid", package = "mclust")
 CRIMCOORDS <- crimcoords(thyroid[,-1], thyroid$Diagnosis, plot = FALSE)
 zapsmall(eval <- CRIMCOORDS$evalues)
 eval[1:2]/sum(eval)
@@ -156,8 +156,8 @@ legend("topright", legend = levels(thyroid$Diagnosis), inset = 0.02,
        pch = mclust.options("classPlotSymbols")[1:3])
 
 
-## -------------------------------------------------------------------------------
-data(wine, package = "gclus")
+## ---------------------------------------------------------------------------
+data("wine", package = "gclus")
 Class <- factor(wine$Class, levels = 1:3,
                 labels = c("Barolo", "Grignolino", "Barbera"))
 X <- data.matrix(wine[,-1])
@@ -165,35 +165,35 @@ mod <- Mclust(X, G = 3, modelNames = "VVE")
 table(Class, Cluster = mod$classification)
 
 
-## ----graphs_wine_dr-------------------------------------------------------------
+## ----graphs_wine_dr---------------------------------------------------------
 drmod <- MclustDR(mod, lambda = 1)
 summary(drmod)
 
 
-## ----eval=FALSE-----------------------------------------------------------------
+## ----eval=FALSE-------------------------------------------------------------
 ## plot(drmod, what = "contour")
 
 
-## ----eval=FALSE-----------------------------------------------------------------
+## ----eval=FALSE-------------------------------------------------------------
 ## plot(drmod, what = "boundaries")
 
 
-## ----eval=FALSE-----------------------------------------------------------------
+## ----eval=FALSE-------------------------------------------------------------
 ## miscl <- classError(Class, mod$classification)$misclassified
 ## points(drmod$dir[miscl,], pch = 1, cex = 2)
 
 
-## ----echo=FALSE, out.width="0.49\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.49\\textwidth"--------------------------------
 plot(drmod, what = "contour")
 
 
-## ----echo=FALSE, out.width="0.49\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.49\\textwidth"--------------------------------
 plot(drmod, what = "boundaries")
 
 
-## -------------------------------------------------------------------------------
-mod <- Mclust(iris[,1:4],G=3)
-drmod <- MclustDR(mod, lambda=.5)
+## ---------------------------------------------------------------------------
+mod <- Mclust(iris[, 1:4], G = 3)
+drmod <- MclustDR(mod, lambda = .5)
 summary(drmod)
 
 
@@ -205,49 +205,49 @@ plot(drmod, what = "evalues")
 plot(drmod, what = "pairs")
 
 
-## ----graphs_iris_drsubsel, cache=TRUE-------------------------------------------
+## ----graphs_iris_drsubsel, cache=TRUE---------------------------------------
 sdrmod <- MclustDRsubsel(drmod, verbose = TRUE)
 summary(sdrmod)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 zapsmall(cor(drmod$dir, sdrmod$dir)^2)
 
 
-## ----eval=FALSE-----------------------------------------------------------------
+## ----eval=FALSE-------------------------------------------------------------
 ## plot(sdrmod, what = "contour", nlevels = 7)
 ## plot(sdrmod, what = "classification")
 ## plot(sdrmod, what = "boundaries")
 
 
-## ----echo=FALSE, out.width="0.49\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.49\\textwidth"--------------------------------
 plot(sdrmod, what = "contour", nlevels = 7)
 
 
-## ----echo=FALSE, out.width="0.49\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.49\\textwidth"--------------------------------
 plot(sdrmod, what = "boundaries")
 
 
-## ----echo=FALSE, out.width="0.49\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.49\\textwidth"--------------------------------
 plot(sdrmod, what = "classification")
 
 
-## ----echo=FALSE, out.width="0.49\\textwidth"------------------------------------
+## ----echo=FALSE, out.width="0.49\\textwidth"--------------------------------
 plot(sdrmod, what = "density")
 
 
-## ----eval=FALSE-----------------------------------------------------------------
+## ----eval=FALSE-------------------------------------------------------------
 ## plot(sdrmod, what = "density")
 
 
-## -------------------------------------------------------------------------------
-data(banknote, package = "mclust")
-mod <- MclustDA(data = banknote[,-1], class = banknote$Status)
+## ---------------------------------------------------------------------------
+data("banknote", package = "mclust")
+mod <- MclustDA(data = banknote[, -1], class = banknote$Status)
 summary(mod)
 
 
-## -------------------------------------------------------------------------------
-drmod <- MclustDR(mod, lambda=.5)
+## ---------------------------------------------------------------------------
+drmod <- MclustDR(mod, lambda = .5)
 summary(drmod)
 
 
@@ -263,12 +263,12 @@ clPairsLegend(0.1, 0.4, class = levels(drmod$classification),
               title = "Swiss banknote data")
 
 
-## ----graphs_banknote_drsubsel, cache=TRUE---------------------------------------
+## ----graphs_banknote_drsubsel, cache=TRUE-----------------------------------
 sdrmod <- MclustDRsubsel(drmod, verbose = TRUE)
 summary(sdrmod)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 zapsmall(cor(drmod$dir, sdrmod$dir)^2)
 
 
@@ -280,17 +280,15 @@ plot(sdrmod, what = "classification")
 ## ----ggplot_faithful, fig.width=6, fig.height=5, out.width="0.7\\textwidth", fig.cap="Scatterplot of the \\code{faithful}\\ data with points marked according to the GMM clusters identified by \\code{Mclust}."----
 mod <- Mclust(faithful)
 DF <- data.frame(mod$data, cluster = factor(mod$classification))
-library(ggplot2)
+library("ggplot2")
 ggplot(DF, aes(x = eruptions, y = waiting, 
                colour = cluster, shape = cluster)) +
   geom_point()
 
 
 ## ----ggplot_faithful_bic, fig.cap="BIC traces for the GMMs estimated for the \\code{faithful}\\ data.", fig.width=7, fig.height=5, out.width="\\textwidth"----
-library(tidyr)
-DF <- mod$BIC
-DF <- DF[1:nrow(DF), 1:ncol(DF)]
-DF <- data.frame(DF, G = 1:nrow(DF))
+library("tidyr")
+DF <- data.frame(mod$BIC[], G = 1:nrow(mod$BIC))
 DF <- pivot_longer(DF, cols = 1:14, names_to = "Model", values_to = "BIC")
 DF$Model <- factor(DF$Model, levels = mclust.options("emModelNames"))
 
@@ -304,13 +302,13 @@ ggplot(DF, aes(x = G, y = BIC, colour = Model, shape = Model)) +
   guides(shape = guide_legend(ncol=2))
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mod <- Mclust(iris[, 1:4], G = 3)
 
 
 ## ----ggplot_iris_latent_profile, fig.cap="Latent profiles plot for the (\\code{VEV},3) model estimated for the \\code{iris}\\ data.", fig.width=6, fig.height=5, out.width="0.9\\textwidth"----
 means <- data.frame(Profile = 1:mod$G, t(mod$parameters$mean))
-means <- pivot_longer(means, cols = 2:5, 
+means <- pivot_longer(means, cols = -1, 
                       names_to = "Variable",
                       values_to = "Mean")
 means$Profile  <- factor(means$Profile)
@@ -329,11 +327,11 @@ ggplot(means, aes(Variable, Mean, group = Profile,
 
 
 ## ----ggplot_iris_chull, fig.width=7, fig.height=5, out.width="0.9\\textwidth", fig.cap="Scatterplot of the first two GMMDR directions with added convex hulls for the \\code{iris}\\ data classes."----
-damod <- MclustDA(iris[,1:4], iris$Species)
+damod <- MclustDA(iris[, 1:4], iris$Species)
 drmod <- MclustDR(damod)
-DF1 <- data.frame(drmod$dir[,1:2], cl = damod$class)
-DF2 <- do.call("rbind", by(DF1, DF1[,3], 
-                           function(x) x[chull(x),]))
+DF1 <- data.frame(drmod$dir[, 1:2], cl = damod$class)
+DF2 <- do.call("rbind", by(DF1, DF1[, 3], 
+                           function(x) x[chull(x), ]))
 ggplot() + 
   geom_point(data = DF1, aes(x = Dir1, y = Dir2, color = cl, shape = cl)) + 
   geom_polygon(data = DF2, aes(x = Dir1, y = Dir2, fill = cl), alpha = 0.4) 
@@ -350,7 +348,7 @@ ggplot(faithful, aes(waiting)) +
   geom_line(data = pred, aes(x, density))
 
 
-## ----echo=FALSE, eval=FALSE-----------------------------------------------------
+## ----echo=FALSE, eval=FALSE-------------------------------------------------
 ## # sarebbe carino fare un grafico del tipo in
 ## # https://ggplot2.tidyverse.org/reference/geom_density.html
 ## # https://stackoverflow.com/questions/40131443/kernel-density-estimation-in-ggplot-with-geom-density
@@ -377,7 +375,7 @@ ggplot(faithful, aes(waiting)) +
 ## 
 
 ## ----ggplot_hemophilia_boot1, echo=-1, fig.cap="Bootstrap distribution for the mixture proportions of (\\code{VVV},2) model fitted to the \\code{hemophilia}\\ data.", fig.width=9, fig.height=5, out.width="0.9\\textwidth"----
-# load_cache("mclust_hemophilia_boot", path = "./Cache/")
+load_cache("mclust_hemophilia_boot", path = "./Cache/")
 DF <- data.frame(mixcomp = rep(1:boot$G, each = boot$nboot), 
                  pro = as.vector(boot$pro))
 ggplot(DF, aes(x = pro)) + 
@@ -389,18 +387,18 @@ ggplot(DF, aes(x = pro)) +
 
 
 ## ----ggplot_hemophilia_boot2, echo=-(1:2), fig.cap="Bootstrap distribution for the mixture component means of (\\code{VVV},2) model fitted to the \\code{hemophilia}\\ data.", fig.width=8, fig.height=7, out.width="\\textwidth"----
-DF0 <- data.frame(rbind(cbind(mixcomp = 1, boot$mean[,,1]), 
-                        cbind(mixcomp = 2, boot$mean[,,2])))
+DF0 <- data.frame(rbind(cbind(mixcomp = 1, boot$mean[, , 1]), 
+                        cbind(mixcomp = 2, boot$mean[, , 2])))
 DF0 <- tidyr::pivot_longer(DF0, cols = 2:3, names_to = "variable", values_to = "mean")
 DF <- rbind(
   data.frame("mixcomp"  = 1,
-             "variable" = rep(colnames(boot$mean[,,1]), 
+             "variable" = rep(colnames(boot$mean[, , 1]), 
                               each = dim(boot$mean)[1]),
-             "mean"     = as.vector(boot$mean[,,1])),
+             "mean"     = as.vector(boot$mean[, , 1])),
   data.frame("mixcomp"  = 2,
-             "variable" = rep(colnames(boot$mean[,,2]), 
+             "variable" = rep(colnames(boot$mean[, , 2]), 
                               each = dim(boot$mean)[1]),
-             "mean"     = as.vector(boot$mean[,,2])))
+             "mean"     = as.vector(boot$mean[, , 2])))
 ggplot(DF, aes(x = mean)) +
    geom_histogram(aes(y = stat(density)), bins = 15,
                   fill = "slategray3", colour = "grey92") +
@@ -409,12 +407,12 @@ ggplot(DF, aes(x = mean)) +
    ylab("Density of bootstrap distribution")
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mclust.options("bicPlotColors")
 mclust.options("classPlotColors")
 
 
-## ----echo=FALSE, eval=FALSE-----------------------------------------------------
+## ----echo=FALSE, eval=FALSE-------------------------------------------------
 ## # tentativo di mostrare un grafico con i colori, ma non mi convince
 ## bicPlotColors <- mclust.options("bicPlotColors")
 ## classPlotColors <- mclust.options("classPlotColors")
@@ -432,7 +430,7 @@ mclust.options("classPlotColors")
 ## bicPlotColorsWong <- c(WongPalette, WongPalette[1:6])
 ## classPlotColorsWong <- WongPalette[-1]
 ## 
-## par(mfrow=c(2,2), mar = c(1,1,3,0))
+## par(mfrow=c(2, 2), mar = c(1, 1, 3, 0))
 ## n = 14
 ## image(1:n, 1, as.matrix(1:n), col = bicPlotColors[1:n],
 ##       xlab = "", ylab = "", xaxt = "n", yaxt = "n", bty = "n")
@@ -449,27 +447,27 @@ mclust.options("classPlotColors")
 ## title("classPlotColorsWong", font = 1)
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 palette.colors(palette = "Okabe-Ito")
 
 
-## ----echo=FALSE, eval=FALSE-----------------------------------------------------
+## ----echo=FALSE, eval=FALSE-------------------------------------------------
 ## # OLD
 ## # Wong color-blind-friendly palette
 ## WongPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442",
 ##                  "#0072B2", "#D55E00", "#CC79A7")
 ## 
-## bicPlotColorsWong <- c(bicPlotColors[1:2], WongPalette[c(2:8,2:6)])
+## bicPlotColorsWong <- c(bicPlotColors[1:2], WongPalette[c(2:8, 2:6)])
 ## classPlotColorsWong <- WongPalette[-1]
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 # get and save default palettes
 bicPlotColors <- mclust.options("bicPlotColors")
 classPlotColors <- mclust.options("classPlotColors")
 
 # set Okabe-Ito palette for use in mclust
 bicPlotColors_Okabe_Ito <-
-   palette.colors(palette = "Okabe-Ito")[c(9,1,2:8,2:6,9,1)]
+   palette.colors(palette = "Okabe-Ito")[c(9, 1, 2:8, 2:6, 9, 1)]
 names(bicPlotColors_Okabe_Ito) <- names(bicPlotColors)
 
 classPlotColorsWong <- palette.colors(palette = "Okabe-Ito")[-1]
@@ -484,7 +482,7 @@ plot(mod, what = "BIC")
 plot(mod, what = "classification")
 
 
-## -------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------
 mclust.options("bicPlotColors" = bicPlotColors)
 mclust.options("classPlotColors" = classPlotColors)
 
